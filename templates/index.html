@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>Credit Card Details</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  
+</head>
+<style>
+body  {
+  background-color: #f1ecec;
+}
+
+.result {
+    margin: auto;
+    width: 35%;
+    border: 2px groove;
+}
+</style>
+<body>
+ <div class="predict">
+	<h2 style="margin: auto; width: 35%; padding: 1%; border: 2px solid; text-align: center;">Credit Card Defaulter Prediction</h2>
+
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{url_for('predict_datapoint')}}" method="post">
+		<fieldset style="float:left;height: 390px;">
+			<legend><b>Demographic data:</b></legend>
+			<p><b>SEX:</b></p>
+			<input type="radio" id="male" name="SEX" value="1" required="required" />
+			<label for="male">Male</label>
+			<input type="radio" id="female" name="SEX" value="2" required="required" />
+			<label for="female">Female</label>
+			<br>
+		
+			<p><b>EDUCATION:</b></p>
+			<input type="radio" id="graduate_school" name="EDUCATION" value="1" required="required"/>
+			<label for="graduate_school">Graduate School</label>
+			<input type="radio" id="university" name="EDUCATION" value="2" required="required"/>
+			<label for="university">University</label>
+			<input type="radio" id="high_school" name="EDUCATION" value="3" required="required"/>
+			<label for="high_school">High School</label>
+			<input type="radio" id="others" name="EDUCATION" value="4" required="required"/>
+			<label for="others">Others</label>
+			<input type="radio" id="unknown" name="EDUCATION" value="5"required="required"/>
+			<label for="unknown">Unknown</label>
+			<br>
+			<p><b>Marrital Status:</b></p>
+			<input type="radio" id="married" name="MARRIAGE" value="1"required="required"/>
+			<label for="married">Married</label>
+			<input type="radio" id="single" name="MARRIAGE" value="2" required="required"/>
+			<label for="single">Single</label>
+			<input type="radio" id="others" name="MARRIAGE" value="3" required="required"/>
+			<label for="others">Others</label>
+			<br>
+			<br>
+			<label for="AGE"><b>Age:</b></label>
+			<input type="text" name="AGE" placeholder="in years" required="required" />
+			<br>
+			<br>
+			<p><b>Limit Balance:</b><br>
+			Amount of given credit in dollar (includes individual and family/supplementary credit)</p>
+			<input type="text" name="LIMIT_BAL" placeholder="amount in dollar" required="required" />
+			
+		</fieldset>
+		<fieldset style="height: 390px;">
+			<legend><b>Behavioural data:</b></legend>
+			<div class="repay_status_parent">
+				<p><b>Repayment Status:</b><br>
+				(-1=pay delay, 1=one month delay, 2=two months delay, … 9=delay for nine months and above)</p>						
+				<div style="float:left;">
+					<label for="repay_status">September</label><br>
+					<input name="PAY_1" id="PAY_1" min="-2" max="9" type="number" value="0" required>
+				</div>
+			</div>
+			<br>
+			<br>
+			<br>
+			<div class="bill_amount_parent">
+                <p><b>Bill Amounts:</b> Amount of bill statements (in dollar)</p>
+				<div style="float:left; margin-right: 1.5em;">
+				<div style="float:left;">
+					<label for="BILL_AMT1">September</label><br>
+					<input name="BILL_AMT1" id="BILL_AMT1" value="0" type="text" required>
+				</div>
+			</div>
+			<br>
+			<br>
+			<br>
+			<br>
+			<div class="previous_payments_parent">
+				<p><b>Previous Payments:</b> Amount of previous payments (in dollar)</p>			
+				<div style="float:left; margin-right: 1.5em;">
+					<label for="previous_payments">April</label><br>
+					<input name="PAY_AMT6" id="PAY_AMT6" value="0" type="text" required>
+				</div>
+				<div style="float:left; margin-right: 1.5em;">
+					<label for="previous_payments">May</label><br>
+					<input name="PAY_AMT5" id="PAY_AMT5" value="0" type="text" required>
+				</div>
+				<div style="float:left; margin-right: 1.5em;">
+					<label for="previous_payments">June</label><br>
+					<input name="PAY_AMT4" id="PAY_AMT4" value="0" type="text" required>
+				</div>
+				<div style="float:left; margin-right: 1.5em;">
+					<label for="previous_payments">July</label><br>
+					<input name="PAY_AMT3" id="PAY_AMT3" value="0" type="text" required>
+				</div>
+				<div style="float:left; margin-right: 1.5em;">
+					<label for="previous_payments">August</label><br>
+					<input name="PAY_AMT2" id="PAY_AMT2" value="0" type="text" required>
+				</div>
+				<div style="float:left;">
+					<label for="previous_payments">September</label><br>
+					<input name="PAY_AMT1" id="PAY_AMT1" type="text" value="0" required>
+				</div>
+			</div>
+		</fieldset>
+		<br>
+		<div style="text-align:center;">
+			<button type="submit" class="btn btn-primary btn-block btn-large"><b>Predict</b></button>
+		</div>
+    </form>
+	<br>
+	<div class="result" style="text-align: center;">
+		{% if final_result %}
+			<p style="padding: 0.5%"><b>{{ final_result }}</b></p>
+		{% endif %}	
+	</div>
+ </div>
+
+
+</body>
+</html>
+
